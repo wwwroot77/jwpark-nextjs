@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="namespace1">
+  <select id="agent_list">
+    SELECT agent_id as id,port,owner,active,java_version FROM bc_agent_info
+  </select>
+  <select id="login_check">
+    SELECT user_name FROM bc_user_info where user_id = #{user_id}
+  </select>
+  <select id="user_list">
+    select a.user_id as id,
+           a.user_name as name,
+           b.code_name || ' (' || b.code_desc || ')' as department
+    from bc_user_info a
+    left join (select * from bc_code_info where code_type='GROUP') b
+    on a.group_id = b.code_id
+  </select>
+
+  <select id="alarm_current">
+    select ROW_NUMBER() OVER (ORDER BY b.agent_id) AS ID,
+           d.code_name site_name,
+           e.code_name line_name,
+           c.host_name,
+           c.ip_address,           
+           b.owner, 
+           a.object_name,
+           a.event_name,
+           a.value ,
+           a.status ,
+           a.update_time
+    from bc_alarm_current a
+        left join
+          bc_agent_info b
+          on a.agent_id = b.agent_id
+        left join 
+          bc_server_info c
+          on b.server_id = c.server_id
+        left join 
+          (select * from bc_code_info where code_type = 'SITE') d 
+          on c.site_id = d.code_id
+        left join 
+          (select * from bc_code_info where code_type = 'LINE') e 
+          on c.line_id = e.code_id
+    where c.host_name is not null
+    --and   a.status in ('FAIL','WARNNING')
+  </select>
+  <select id="server_list">
+    select a.server_id as id,
+          a.host_name,
+          a.serial_number,
+          a.manager_user_id,       
+          b.user_name as user,
+          a.cpu_clock
+    from bc_server_info a
+    left join bc_user_info b
+    on a.manager_user_id = b.user_id
+  </select>
+
+  <select id="server_list2">
+select code_id,parent_id,code_name as title, null as ip_address,
+       null as agent_version
+from bc_code_info where code_type = 'SITE'
+union
+select code_id,parent_id,code_name as title, null as ip_address,
+        null as agent_version
+from bc_code_info where code_type = 'LINE'
+union
+select 1000 + server_id as code_id,parent_id,host_name as title, ip_address,
+        null as agent_version 
+from bc_server_info
+union
+select 10000 + agent_id as code_id, 1000 + server_id as parent_id, owner as title, port as ip_address,
+       agent_version
+from bc_agent_info
+  </select>
+  <select id="server_list3">
+    select a.server_id as id,
+           a.host_name,
+           a.os_name,
+           a.memory,
+           a.disk,
+           a.ip_address,
+           a.manager_user_id,
+           b.user_name,
+           a.parent_id
+    from   bc_server_info a
+    left join bc_user_info b
+    on     a.manager_user_id = b.user_id 
+  </select>
+
+</mapper>
