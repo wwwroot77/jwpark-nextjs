@@ -7,7 +7,7 @@ export default function App() {
 
     return (
         <DataGrid
-        dataSource="http://localhost:3000/api/serverlist3"
+        dataSource={ process.env.NEXT_PUBLIC_HOME_URL + "/api/serverlist3"}
         //defaultColumns={All}
         showBorders={true}
         />

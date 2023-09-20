@@ -24,7 +24,7 @@ export default function MultiColumnDropdownTextField({ onChange, anchorEl, onClo
       setSelectedIds(initialSelectedIds);
     }
 
-    fetch('http://localhost:3000/api/userlist')
+    fetch( process.env.NEXT_PUBLIC_HOME_URL + '/api/userlist')
       .then(response => response.json())
       .then(data => setItems(data))
       .catch(error => console.error('Error fetching data:', error));

@@ -7,7 +7,7 @@ export default function EditableGrid() {
   useEffect(() => {
 
     // API에서 데이터를 가져옵니다.
-    fetch('http://localhost:3000/api/serverlist')
+    fetch(process.env.NEXT_PUBLIC_HOME_URL + '/api/serverlist')
       .then(response => response.json())
       .then(data => {
         // 가져온 데이터를 상태에 설정합니다.

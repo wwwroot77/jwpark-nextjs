@@ -18,7 +18,7 @@ import "devextreme/dist/css/dx.material.blue.dark.css";
 const dataSource = {
     load(loadOptions) {
       const parentIdsParam = loadOptions.parentIds;
-      const url = new URL('http://localhost:3000/api/agentlist');
+      const url = new URL( process.env.NEXT_PUBLIC_HOME_URL + '/api/agentlist' );
       if (parentIdsParam) {
         parentIdsParam.forEach((id) => {
           url.searchParams.append('parentIds', id);
