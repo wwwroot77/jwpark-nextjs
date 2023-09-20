@@ -17,6 +17,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/login/index.js", "src/components/register/registerModal.js", "src/components/register/registerForm.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/login/index.js", "src/components/register/registerModal.js", "src/components/register/registerForm.js", "src/pages/index.js"],
   "exclude": ["node_modules"]
 }
